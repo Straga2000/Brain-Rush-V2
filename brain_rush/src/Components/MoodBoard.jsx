@@ -15,6 +15,7 @@ export default class MoodBoard extends Component {
         return (
             <React.Fragment>
                 <PostIt postIt = {postItSettings}/>
+                <StickyNotes/>
             </React.Fragment>
         );
     }

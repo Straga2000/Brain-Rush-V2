@@ -1,47 +1,22 @@
-import React, { Component } from "react";
-import MDBColorPicker from "mdb-react-color-picker";
-import { MDBCard, MDBCardBody, MDBBtn } from "mdbreact";
+import React, {Component} from 'react';
 
-class App extends Component {
+import { SketchPicker } from 'react-color';
+
+export default class StickyNotes extends Component{
     state = {
-        colorPicker7: false,
+        background: '#fff',
     };
 
-    close = () => {
-        this.setState({ colorPicker7: false });
-    };
-
-    toggle = () => {
-        this.setState({ colorPicker7: !this.state.colorPicker7 });
-    };
-
-    changeWebsiteBackgroundColor = value => {
-        document.body.style.background = `${value.rgba}`;
+    handleChangeComplete = (color) => {
+        this.setState({ background: color.hex });
     };
 
     render() {
         return (
-            <MDBCard>
-                <MDBCardBody className="text-center d-flex justify-content-center align-items-center flex-column">
-                    <p>
-                        Change the background color if this site dynamically by changing the
-                        color in Color Picker
-                    </p>
-
-                    <MDBColorPicker
-                        isOpen={this.state.colorPicker7}
-                        close={this.close}
-                        rgbaColor="rgba(255, 255, 255, 1.0)"
-                        getValue={this.changeWebsiteBackgroundColor}
-                    >
-                        <MDBBtn color="primary" size="sm" onClick={this.toggle}>
-                            Open picker
-                        </MDBBtn>
-                    </MDBColorPicker>
-                </MDBCardBody>
-            </MDBCard>
+            <SketchPicker
+                color={ this.state.background }
+                onChangeComplete={ this.handleChangeComplete }
+            />
         );
     }
 }
-
-export default App;
