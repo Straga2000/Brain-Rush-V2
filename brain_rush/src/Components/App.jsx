@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import  {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import MoodBoard from "./MoodBoard";
+
 
 ///IMPORT CUSTOM STYLING
 import '../Styles/App.css';
@@ -33,6 +35,7 @@ export default class App extends Component {
     render() {
         return (
                 <div className={"App no-mg-pd"}>
+                    <MoodBoard/>
                 </div>
             // <Router>
             //     <Switch>
