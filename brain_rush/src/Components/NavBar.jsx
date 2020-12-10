@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-export default class NumeComponenta extends Component {
+export default class NavBar extends Component {
     state = {
     };
 
@@ -8,6 +8,7 @@ export default class NumeComponenta extends Component {
 
         return (
             <React.Fragment>
+
             </React.Fragment>
         );
     }

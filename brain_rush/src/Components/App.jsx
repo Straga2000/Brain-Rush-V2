@@ -7,6 +7,7 @@ import MoodBoard from "./MoodBoard";
 import '../Styles/App.css';
 import Gallery from "./Gallery";
 import Profile from "./Profile";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // import fs from 'fs';
 //const files = require.context('./', true, /\.(svg|png)$/igm);
