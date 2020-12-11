@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import PostIt from "./PostIt";
 import NavBar from "./NavBar";
+import StickyNotes from "./StickyNotes";
 
 function postItSettings(id) {
     return({
@@ -8,9 +9,7 @@ function postItSettings(id) {
         text : "",
         id : id.toString()
         });
-};
-
-
+}
 
 export default class MoodBoard extends Component {
     state = {
@@ -39,11 +38,16 @@ export default class MoodBoard extends Component {
         console.log(postList.length)
     };
 
+    new_note = () => {
+        return (<StickyNotes/>);
+    };
+
     render() {
         return (
             <React.Fragment>
                 <NavBar onPostCreate = {this.handlePostCreate}/>
                 {this.state.postList.map((post) => <PostIt onDelete={() => {this.handlePostDelete(post.id)}} key={post.id} postIt = {post}/>)}
+                <StickyNotes/>
             </React.Fragment>
         );
     }
