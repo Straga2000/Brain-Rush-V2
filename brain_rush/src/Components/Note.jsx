@@ -35,8 +35,8 @@ export default class Note extends Component {
         return (
             <React.Fragment>
                 {isSelected === false ?
-                    <p className="text-left" onClick={this.onInputChange}>{text !== "" ? text : "Write something..."}</p> :
-                    <InputGroup size="sm" className="mb-3">
+                    <p className="text-left m-0" onClick={this.onInputChange}>{text !== "" ? text : "Write something..."}</p> :
+                    <InputGroup size="sm" className="m-0">
                         <FormControl aria-label="Small"
                                      aria-describedby="inputGroup-sizing-sm"
                                      onBlur={this.onTextChange}

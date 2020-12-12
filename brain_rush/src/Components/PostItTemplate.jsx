@@ -28,8 +28,8 @@ export default class PostItTemplate extends Component {
                 <Card className={"border-0 w-" + width.replace(/%/, '')}>
                     {/*<Card.Img variant="top" src="https://picsum.photos/720/400"/>*/}
                     <Card.Header className="d-flex align-items-center justify-content-between">
-                        <h2>{postIt.title}</h2>
-                        <Dropdown>
+                        <h2 className="font-weight-light">{postIt.title}</h2>
+                        <Dropdown variant={"sm"}>
                             <Dropdown.Toggle variant="primary" id="dropdown-basic">
                                 Width
                             </Dropdown.Toggle>
@@ -41,9 +41,9 @@ export default class PostItTemplate extends Component {
                             </Dropdown.Menu>
                         </Dropdown>
                     </Card.Header>
-                    <Card.Body>
+                    <Card.Body className = "d-flex flex-column">
                         {this.props.children}
-                        <Button className="d-flex float-left btn-sm" variant="danger" onClick={() => this.props.onDelete(this.state.postIt.id)}>Delete note</Button>
+                        <Button className="float-left btn-sm mt-3" variant="danger" onClick={() => this.props.onDelete(this.state.postIt.id)}>Delete note</Button>
                     </Card.Body>
                 </Card>
             </Draggable>

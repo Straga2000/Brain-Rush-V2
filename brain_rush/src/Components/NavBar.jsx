@@ -15,7 +15,9 @@ export default class NavBar extends Component {
                 <Navbar bg="light" variant="light">
                     <Navbar.Brand href="#home">Brain rush</Navbar.Brand>
                     <Nav>
-                        <Button variant="primary" onClick={this.props.onPostCreate}>Create note</Button>
+                        <Button variant="primary" onClick={() => this.props.onPostCreate("postList", "text")} className="mr-1">Add note</Button>
+                        <Button variant="primary" onClick={() => this.props.onPostCreate("postList", "image")} className="mr-1">Add visual</Button>
+                        <Button variant="primary" onClick={() => this.props.onPostCreate("postList", "color")} className="mr-1">Add palette</Button>
                     </Nav>
                 </Navbar>
             </React.Fragment>

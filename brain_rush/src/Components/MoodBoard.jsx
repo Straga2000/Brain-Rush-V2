@@ -1,17 +1,26 @@
 import React, {Component} from "react";
-import PostIt from "./PostIt";
+
 import NavBar from "./NavBar";
 import StickyNotes from "./StickyNotes";
 import PostItTemplate from "./PostItTemplate";
 import Note from "./Note";
 import ColorScheme from "./StickyNotes";
-function postItSettings(id) {
+import Visual from "./Visual";
+
+function postItSettings(id, category) {
+
+    let title = "Note";
+    if(category === "text") title = "Text note";
+    else if(category === "color") title = "Color scheme";
+    else if(category === "image") title = "Visual reference";
+
     return({
-        title : "Note ",
+        title : title,
         text : "",
         id : id.toString(),
         imgURL : "",
-        colorScheme : []
+        colorScheme : [],
+        type : category,
         });
 }
 
@@ -36,10 +45,10 @@ export default class MoodBoard extends Component {
         this.setState(newObj)
     };
 
-    handleObjectCreate = (name) =>
+    handleObjectCreate = (name, type) =>
     {
         const ObjectList = this.state[name];
-        ObjectList.push(postItSettings(ObjectList.length));
+        ObjectList.push(postItSettings(ObjectList.length, type));
         let newObj = {};
         newObj[name] = ObjectList;
 
@@ -64,7 +73,7 @@ export default class MoodBoard extends Component {
 
     handlePostCreate = () =>
     {
-        this.handleObjectCreate("postList");
+        this.handleObjectCreate("postList", "text");
     };
 
     handlePostUpdate = (postObject) =>
@@ -72,21 +81,33 @@ export default class MoodBoard extends Component {
         this.handleObjectUpdate(postObject, "postList");
     };
 
+    handleColorSchemeCreate = () =>
+    {
+        this.handleObjectCreate("postList", "color");
+    };
+
+    renderCustomPart = (postObject) =>
+    {
+        if(postObject.type === "text")
+            return (<Note note = {postObject} onUpdate = {this.handlePostUpdate}/>);
+        else if(postObject.type === "color")
+            return (<ColorScheme colors = {postObject} onUpdate = {this.handlePostUpdate}/>);
+        else if(postObject.type === "image")
+            return (<Visual image = {postObject} onUpdate = {this.handlePostUpdate}/>);
+
+    };
 
     render() {
         return (
             <React.Fragment>
-                <NavBar onPostCreate = {this.handlePostCreate}/>
+                <NavBar onPostCreate = {this.handleObjectCreate}/>
                 {this.state.postList.map((post) =>
                 <PostItTemplate
                     onDelete={this.handlePostDelete}
                     key={post.id}
                     postIt = {post}>
-                    {/*<Note note = {post} onUpdate = {this.handlePostUpdate}/>*/}
-                        <ColorScheme colors = {post} onUpdate = {this.handlePostUpdate}/>
+                    {this.renderCustomPart(post)}
                 </PostItTemplate>)}
-
-                {/*<StickyNotes/>*/}
             </React.Fragment>
         );
     }
