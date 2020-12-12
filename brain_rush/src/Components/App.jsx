@@ -37,6 +37,7 @@ export default class App extends Component {
         return (
                 <div className={"App no-mg-pd"}>
                     <MoodBoard/>
+
                 </div>
             // <Router>
             //     <Switch>

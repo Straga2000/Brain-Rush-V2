@@ -1,25 +1,38 @@
-import React, {Component} from 'react';
+import React, {useState} from "react";
+import "../Styles/App.css";
+import {Swatch} from "../common";
+export default class ColorScheme extends React.Component {
 
-import { SketchPicker } from 'react-color';
-import Draggable from "react-draggable";
-
-export default class StickyNotes extends Component{
     state = {
-        background: '#fff',
+color:"#ff0000"
     };
-
-    handleChangeComplete = (color) => {
-        this.setState({ background: color.hex });
-    };
-
+setColor=(color)=>
+{
+    this.setState({color});
+}
     render() {
+
         return (
-            <Draggable>
-                <SketchPicker
-                    color={this.state.background }
-                    onChangeComplete={ this.handleChangeComplete }
-                />
-            </Draggable>
+
+
+
+                    <div  style="width: '22px',
+        height: '22px',
+        float: 'left',
+        marginRight: '10px',
+        marginBottom: '10px',
+        borderRadius: '4px';">
+
+                            color={this.state.color}
+                            onChangeComplete={ (color) => {this.setColor(color.hex)}}
+                       <div>
+
+                       </div>
+                    </div>
+
+
         );
     }
 }
+
+

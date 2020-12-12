@@ -4,7 +4,7 @@ import NavBar from "./NavBar";
 import StickyNotes from "./StickyNotes";
 import PostItTemplate from "./PostItTemplate";
 import Note from "./Note";
-
+import ColorScheme from "./StickyNotes";
 function postItSettings(id) {
     return({
         title : "Note ",
@@ -72,9 +72,6 @@ export default class MoodBoard extends Component {
         this.handleObjectUpdate(postObject, "postList");
     };
 
-    new_note = () => {
-        return (<StickyNotes/>);
-    };
 
     render() {
         return (
@@ -85,8 +82,8 @@ export default class MoodBoard extends Component {
                     onDelete={this.handlePostDelete}
                     key={post.id}
                     postIt = {post}>
-                        <Note note = {post} onUpdate = {this.handlePostUpdate}/>
-                        {/*<ColorScheme colors = {post.colorScheme}/> */}
+                    {/*<Note note = {post} onUpdate = {this.handlePostUpdate}/>*/}
+                        <ColorScheme colors = {post} onUpdate = {this.handlePostUpdate}/>
                 </PostItTemplate>)}
 
                 {/*<StickyNotes/>*/}
