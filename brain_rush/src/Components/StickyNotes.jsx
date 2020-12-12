@@ -1,34 +1,27 @@
 import React, {useState} from "react";
 import "../Styles/App.css";
-import {Swatch} from "../common";
+import Note from "./Note";
+
 export default class ColorScheme extends React.Component {
 
     state = {
-color:"#ff0000"
+      postIt:this.props.postIt
     };
+
 setColor=(color)=>
 {
     this.setState({color});
 }
+
     render() {
-
+const {colorScheme}=this.state.postIt;
         return (
-
-
-
-                    <div  style="width: '22px',
-        height: '22px',
-        float: 'left',
-        marginRight: '10px',
-        marginBottom: '10px',
-        borderRadius: '4px';">
-
-                            color={this.state.color}
-                            onChangeComplete={ (color) => {this.setColor(color.hex)}}
-                       <div>
-
-                       </div>
+            {colorScheme.map(elem=>
+                    <div>
+                        <div  className="mb-1" style={{width: '22px', height: '22px', backgroundColor:this.state.color}}></div>
+                        < Note
                     </div>
+                )}
 
 
         );
