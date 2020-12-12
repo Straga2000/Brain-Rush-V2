@@ -8,39 +8,10 @@ import Dropdown from "react-bootstrap/cjs/Dropdown";
 
 import Draggable from "react-draggable";
 
-//import {textFrequencySentence} from "../Scripts/textAnalysis.js"
-//import {normalizeText, textFrequency} from "../Scripts/textAnalysis";
-
-export default class PostIt extends Component {
+export default class PostItTemplate extends Component {
     state = {
         postIt : this.props.postIt,
-        isSelected : false,
         width : "25"
-    };
-
-    onTextChange = (e) =>
-    {
-        ///trebuie sa suprascriem postIt
-        const postIt = {...this.state.postIt};
-        postIt.text = e.target.value;
-
-        //console.log(textFrequency(e.target.value));
-        ///memoram ce s-a intamplat in input field
-        this.setState({
-            isSelected : false,
-            postIt : postIt});
-        //console.log(this.state.isSelected)
-    };
-
-    onInputChange = (e) =>
-    {
-        this.setState({isSelected : true});
-        console.log(this.state.isSelected)
-    };
-
-    onInputInit = (e) =>
-    {
-        e.target.value = this.state.postIt.text;
     };
 
     setWidth = (e) =>
@@ -51,7 +22,7 @@ export default class PostIt extends Component {
 
     render() {
 
-        const {postIt, isSelected, width} = this.state;
+        const {postIt, width} = this.state;
         return (
             <Draggable>
                 <Card className={"border-0 w-" + width.replace(/%/, '')}>
@@ -71,18 +42,7 @@ export default class PostIt extends Component {
                         </Dropdown>
                     </Card.Header>
                     <Card.Body>
-                        {/*<Card.Title>Card Title</Card.Title>*/}
-                        {/*<Card.Text className="text-left d-flex justify-content-between">*/}
-                        {/*    Some quick example text to build on the card title and make up the bulk of*/}
-                        {/*    the card's content.*/}
-                        {/*</Card.Text>*/}
-
-                        {isSelected === false ?
-                            <p className="text-left" onClick={this.onInputChange}>{postIt.text !== "" ? postIt.text : "Write something..."}</p> :
-                            <InputGroup size="sm" className="mb-3">
-                                <FormControl aria-label="Small" aria-describedby="inputGroup-sizing-sm" onBlur={this.onTextChange} onFocus={this.onInputInit}/>
-                            </InputGroup>
-                        }
+                        {this.props.children}
                         <Button className="d-flex float-left btn-sm" variant="danger" onClick={() => this.props.onDelete(this.state.postIt.id)}>Delete note</Button>
                     </Card.Body>
                 </Card>

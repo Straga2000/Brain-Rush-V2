@@ -2,40 +2,74 @@ import React, {Component} from "react";
 import PostIt from "./PostIt";
 import NavBar from "./NavBar";
 import StickyNotes from "./StickyNotes";
+import PostItTemplate from "./PostItTemplate";
+import Note from "./Note";
 
 function postItSettings(id) {
     return({
         title : "Note ",
         text : "",
-        id : id.toString()
+        id : id.toString(),
+        imgURL : "",
+        colorScheme : []
         });
 }
 
 export default class MoodBoard extends Component {
     state = {
-        postList : []
+        postList : [],
     };
 
-    componentDidMount() {
+    /*componentDidMount() {
         const postList = [];
         for(let i = 0; i < 0; i++)
             postList.push(postItSettings(i));
         //console.log(postList);
         this.setState({postList});
+    };*/
+
+    handleObjectDelete = (id, name) =>
+    {
+        const ObjectList = this.state[name].filter(elem => elem.id !== id);
+        let newObj = {};
+        newObj[name] = ObjectList;
+        this.setState(newObj)
+    };
+
+    handleObjectCreate = (name) =>
+    {
+        const ObjectList = this.state[name];
+        ObjectList.push(postItSettings(ObjectList.length));
+        let newObj = {};
+        newObj[name] = ObjectList;
+
+        this.setState({newObj});
+    };
+
+    handleObjectUpdate = (parameterObject, name) =>
+    {
+        let ObjectList = this.state[name];
+        ObjectList = ObjectList.map((elem) => elem.id === parameterObject.id ? parameterObject : elem);
+
+        let newObj = {};
+        newObj[name] = ObjectList;
+
+        this.setState(newObj);
     };
 
     handlePostDelete = (id) =>
     {
-        const postList = this.state.postList.filter(elem => elem.id !== id);
-        this.setState({postList});
+        this.handleObjectDelete(id, "postList");
     };
 
     handlePostCreate = () =>
     {
-        const postList = this.state.postList;
-        postList.push(postItSettings(postList.length));
-        this.setState({postList});
-        console.log(postList.length)
+        this.handleObjectCreate("postList");
+    };
+
+    handlePostUpdate = (postObject) =>
+    {
+        this.handleObjectUpdate(postObject, "postList");
     };
 
     new_note = () => {
@@ -46,8 +80,16 @@ export default class MoodBoard extends Component {
         return (
             <React.Fragment>
                 <NavBar onPostCreate = {this.handlePostCreate}/>
-                {this.state.postList.map((post) => <PostIt onDelete={() => {this.handlePostDelete(post.id)}} key={post.id} postIt = {post}/>)}
-                <StickyNotes/>
+                {this.state.postList.map((post) =>
+                <PostItTemplate
+                    onDelete={this.handlePostDelete}
+                    key={post.id}
+                    postIt = {post}>
+                        <Note note = {post} onUpdate = {this.handlePostUpdate}/>
+                        {/*<ColorScheme colors = {post.colorScheme}/> */}
+                </PostItTemplate>)}
+
+                {/*<StickyNotes/>*/}
             </React.Fragment>
         );
     }
