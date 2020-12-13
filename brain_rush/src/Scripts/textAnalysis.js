@@ -31,16 +31,14 @@ export function normalizeText(sourceText) {
     ///lowercase all the text and exclude punctuation
     //bagOfWords = bagOfWords.map(elem => elem.replace(excludedCharacters, "").toLowerCase());
     bagOfWords = bagOfWords.map(elem => elem.toLowerCase());
+    //console.log(bagOfWords);
     bagOfWords = bagOfWords.filter(elem => !(stopWords.includes(elem)));
     //console.log(textFrequency(bagOfWords));
     return bagOfWords;
 }
 
-export function textFrequencySentence(sourceText) {
-    let wordList = normalizeText(sourceText);
-    let len = wordList.length;
-
-    wordList = wordList.reduce(function (stats, word) {
+export function textWordCount(vectorWord) {
+    return vectorWord.reduce(function (stats, word) {
 
         /* `stats` is the object that we'll be building up over time.*/
         if ( stats.hasOwnProperty( word ) ) {
@@ -58,6 +56,13 @@ export function textFrequencySentence(sourceText) {
         return stats;
 
     }, {});
+}
+
+export function textFrequencySentence(sourceText) {
+    let wordList = normalizeText(sourceText);
+    let len = wordList.length;
+
+    wordList = textWordCount(wordList);
 
     for(let keyWord in wordList)
         if(wordList.hasOwnProperty(keyWord))
@@ -69,43 +74,93 @@ export function textFrequencySentence(sourceText) {
 export function textFrequency(sourceText) {
     ///list of all frequencies
     let textFrequencyObject = textFrequencySentence(sourceText);
+    //console.log(textFrequencyObject);
     ///slice by sentences
     let sentenceList = sourceText.split(stopCharacters);
-    console.log(sentenceList);
-    ///frequency object for sentences
-    let sentenceObject = createSentenceObject(sentenceList);
+    //console.log(sentenceList);
 
+    let sentenceObject = {};
     for(let i = 0; i < sentenceList.length; i++)
     {
-        let wordObj = textFrequencySentence(sentenceList[i]);
-        let sum = 0;
-
-        for(let keyWord in wordObj)
+        let sentence = sentenceList[i];
+        if(sentence !== "")
         {
-            if(wordObj.hasOwnProperty(keyWord))
-                sum += wordObj[keyWord];
+            //console.log(sentence.length, sentence, i);
+            let tfValue = normalizeText(sentence);
+            let sum = 0;
+
+            for(let j = 0; j < tfValue.length; j++)
+            {
+                sum += textFrequencyObject[tfValue[j]];
+            }
+
+            sentenceObject[sentence] = sum / tfValue.length;
         }
-
-        sum /= wordObj.length;
-
-        if(sentenceObject.hasOwnProperty(sentenceList[i]))
-            sentenceObject[sentenceList[i]] = sum;
     }
 
-    return {correspondence : textFrequencyObject, frequency : sentenceObject};
+    return ({correspondence: textFrequencyObject, frequency: sentenceObject});
 }
 
+export function inverseTextFrequencySentence(sourceText, docLength) {
+    let wordList = textWordCount(normalizeText(sourceText));
 
-export function createSentenceObject(sentenceList) {
+    for(let keyWord in wordList)
+        if(wordList.hasOwnProperty(keyWord))
+            wordList[keyWord] = Math.log(docLength / wordList[keyWord]);
+    return wordList;
+}
+
+export function inverseTextFrequency(sourceText) {
+    let sentenceList = sourceText.split(stopCharacters);
+    let sentenceListLength = sentenceList.length;
+    let inverseTextFrequencyObject = inverseTextFrequencySentence(sourceText, sentenceListLength);
+
+
     let sentenceObject = {};
-    for(let elem in sentenceList)
+
+    for(let i = 0; i < sentenceListLength; i++)
     {
-        if(sentenceList.hasOwnProperty(elem))
-            sentenceObject[sentenceList[elem]] = 0;
+        let sentence = sentenceList[i];
+        if(sentence !== "")
+        {
+            let itfValue = normalizeText(sentence);
+            let sum = 0;
+
+            //console.log(i, sentence, itfValue);
+            for(let j = 0; j < itfValue.length; j++)
+            {
+                sum += inverseTextFrequencyObject[itfValue[j]];
+            }
+
+            sentenceObject[sentence] = sum / itfValue.length;
+        }
     }
-    return sentenceObject;
+
+    return ({correspondence: inverseTextFrequencyObject, frequency: sentenceObject});
+    //return inverseTextFrequencyObject;
 }
 
-export function inverseTextFrequency() {
+export function getSentencesByImportance(sourceText) {
+    let tfValues = textFrequency(sourceText).frequency;
+    let itfValues = inverseTextFrequency(sourceText).frequency;
 
+    let maximizeObject = {};
+    for(let key in tfValues)
+    {
+        if(itfValues.hasOwnProperty(key))
+        {
+                maximizeObject[key] = tfValues[key] * itfValues[key];
+        }
+    }
+
+    return maximizeObject;
+}
+
+export function getTopN(frequencyObj, num) {
+    let props = Object.keys(frequencyObj).map(function(key) {
+        return { key: key, value: this[key] };
+    });
+
+    props.sort(function(p1, p2) { return p2.value - p1.value; });
+    return props.slice(0, num);
 }

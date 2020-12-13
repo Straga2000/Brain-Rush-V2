@@ -2,6 +2,15 @@ import React, {Component} from "react";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 
+import "../Scripts/textAnalysis";
+import {
+    getSentencesByImportance, getTopN,
+    inverseTextFrequency,
+    normalizeText,
+    textFrequency,
+    textFrequencySentence
+} from "../Scripts/textAnalysis";
+
 export default class Note extends Component {
     state = {
         isSelected : false
@@ -13,9 +22,10 @@ export default class Note extends Component {
         const note = {...this.props.note};
         note.text = e.target.value;
         this.props.onUpdate(note);
+        console.log(getSentencesByImportance(note.text));
 
         this.setState({isSelected : false});
-        console.log(this.state.isSelected)
+        //console.log(this.state.isSelected)
     };
 
     onInputChange = (e) =>
